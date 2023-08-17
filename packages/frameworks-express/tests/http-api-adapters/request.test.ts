@@ -3,6 +3,14 @@ import { Request as ExpressRequest } from "express"
 import supertest from "supertest"
 import express from "express"
 
+if (!globalThis.fetch) {
+  console.log("polyfill fetch")
+  globalThis.fetch = require("node-fetch")
+  globalThis.Request = require("node-fetch").Request
+  globalThis.Response = require("node-fetch").Response
+  globalThis.Headers = require("node-fetch").Headers
+}
+
 function expectMatchingRequestHeaders(req: ExpressRequest, request: Request) {
   for (let headerName in req.headers) {
     expect(request.headers.get(headerName)).toEqual(req.headers[headerName])
