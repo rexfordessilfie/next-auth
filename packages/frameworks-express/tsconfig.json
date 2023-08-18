@@ -2,10 +2,10 @@
   "compilerOptions": {
     "declaration": true,
     "allowSyntheticDefaultImports": true,
-    "target": "esnext",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "moduleResolution": "node",
     "strict": false,
-    "module": "esnext",
+    "module": "ESNext",
     "outDir": "./dist",
     "rootDir": "./src",
     "strictNullChecks": true

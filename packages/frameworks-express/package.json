@@ -23,7 +23,8 @@
     "build": "tsup --config ./tsup.config.js && node scripts/postbuild",
     "patch": "npm version patch --no-git-tag-version",
     "clean": "rm -rf index.*",
-    "test": "jest --config ./jest.config.cjs"
+    "test": "jest --config ./jest.config.cjs",
+    "testModules": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs"
   },
   "publishConfig": {
     "access": "public"
