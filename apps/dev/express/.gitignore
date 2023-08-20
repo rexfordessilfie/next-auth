@@ -17,3 +17,8 @@ Thumbs.db
 dist/**/*
 
 public/css/style.css
+
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/playwright-screenshots/
