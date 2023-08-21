@@ -3,7 +3,7 @@
  * :::warning
  * `@auth/express` is currently experimental. The API _will_ change in the future.
  * :::
- *
+
  * Express Auth is the official Express integration for Auth.js.
  * It provides a simple way to add authentication to your Express app in a few lines of code.
  *
@@ -11,16 +11,16 @@
  * ```bash npm2yarn2pnpm
  * npm install @auth/core @auth/express
  * ```
- *
+
  * ## Usage
- *
+
  * ```ts title="src/routes/auth.route.ts"
  * import { ExpressAuth } from "@auth/express"
  * import GitHub from "@auth/core/providers/github"
  * import express from "express"
- *
+
  * const app = express()
- *
+
  * // Make sure to use these body parsers so Auth.js can receive data from the client
  * app.use(express.json())
  * app.use(express.urlencoded({ extended: true }))
@@ -38,12 +38,9 @@
  *       }),
  *     ],
  *   })
- *  ],
- * }))
+ * )
  * ```
- *
  * Don't forget to set the `AUTH_SECRET` environment variable. This should be a minimum of 32 characters, random string. On UNIX systems you can use `openssl rand -hex 32` or check out `https://generate-secret.vercel.app/32`.
- *
  * You will also need to load the environment variables into the Node.js environment. You can do this using a package like [`dotenv`](https://www.npmjs.com/package/dotenv).
  *
  * ### Provider Configuration
