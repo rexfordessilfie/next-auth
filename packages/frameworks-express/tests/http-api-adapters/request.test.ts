@@ -1,14 +1,21 @@
-import * as express from "express"
 import { encodeUrlEncoded, toWebRequest } from "../../src/http-api-adapters"
-import * as supertest from "supertest"
 import { Request as ExpressRequest } from "express"
+import supertest from 'supertest';
+import express from 'express';
 
 if (!globalThis.fetch) {
-  console.log("polyfill fetch")
-  globalThis.fetch = require("node-fetch")
-  globalThis.Request = require("node-fetch").Request
-  globalThis.Response = require("node-fetch").Response
-  globalThis.Headers = require("node-fetch").Headers
+  console.log("polyfill fetch");
+
+  import('node-fetch').then(module => {
+      // @ts-expect-error
+      globalThis.fetch = module.default;
+      // @ts-expect-error
+      globalThis.Request = module.Request;
+      // @ts-expect-error
+      globalThis.Response = module.Response;
+      // @ts-expect-error
+      globalThis.Headers = module.Headers;
+  });
 }
 
 function expectMatchingRequestHeaders(req: ExpressRequest, request: Request) {
