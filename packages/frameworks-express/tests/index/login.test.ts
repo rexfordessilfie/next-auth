@@ -51,6 +51,11 @@ export const authConfig = {
     ],
 };
 
+const extractCookieValue = (headerArray, name) => {
+    const cookieStringFull = headerArray.find(header => header.includes(name));
+    return name + cookieStringFull.split(name)[1].split(";")[0];
+};
+
 describe("Integration test with login and get Session", () => {
 
     let app: express.Express
@@ -88,21 +93,14 @@ describe("Integration test with login and get Session", () => {
 
 
         // Parse cookies for csrf token and callback url
-        const setCookieHeader = response.headers["set-cookie"];
-        const csrfTokenCookie = setCookieHeader.find(header => header.startsWith("next-auth.csrf-token"));
+        const csrfTokenCookie = extractCookieValue(response.headers["set-cookie"], "next-auth.csrf-token");
+        const callbackCookie = extractCookieValue(response.headers["set-cookie"], "next-auth.callback-url");
         const csrfTokenValue = csrfTokenCookie.split("%")[0].split("=")[1];
 
-        const csrfTokenCookieTrim = csrfTokenCookie.split("; Path=/;")[0];
-
-        const callbackCookie = "next-auth.callback-url" + csrfTokenCookie.split("next-auth.callback-url")[1];
-        const callbackCookieTrim = callbackCookie.split('; Path=/;')[0];
-
-        const postCookie = csrfTokenCookieTrim + '; ' + callbackCookieTrim;
-
         // Sign in
-        const response2 = await client
+        const responseCredentials = await client
             .post("/api/auth/callback/credentials")
-            .set("Cookie", [postCookie]) // Send the cookie with the request
+            .set("Cookie", [`${csrfTokenCookie}; ${callbackCookie}`]) // Send the cookie with the request
             .send({
                 csrfToken: csrfTokenValue,
                 username: "johnsmith",
@@ -110,19 +108,14 @@ describe("Integration test with login and get Session", () => {
             });
         
         // Parse cookie for session token
-        const setCookieHeader2 = response2.headers["set-cookie"];
-        const csrfTokenCookie2 = setCookieHeader2.find(header => header.includes("next-auth.session-token"));
-
-        const loginCookie = "next-auth.session-token" + csrfTokenCookie2.split("next-auth.session-token")[1];
-        const loginCookieTrim = loginCookie.split("; Path=/;")[0];
-        const getSessionCookie = postCookie + '; ' + loginCookieTrim;
+        const sessionTokenCookie = extractCookieValue(responseCredentials.headers["set-cookie"], "next-auth.session-token");
 
         // Call test route
         await client
             .post("/test")
             .set("X-Test-Header", "foo")
             .set("Accept", "application/json")
-            .set("Cookie", [getSessionCookie]) // Send the cookie with the request
+            .set("Cookie", [`${csrfTokenCookie}; ${callbackCookie}; ${sessionTokenCookie}`]) // Send the cookie with the request
 
         await expectations()
 
