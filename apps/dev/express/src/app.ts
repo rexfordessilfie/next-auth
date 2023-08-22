@@ -24,6 +24,9 @@ app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
 
+// https://stackoverflow.com/questions/40459511/in-express-js-req-protocol-is-not-picking-up-https-for-my-secure-link-it-alwa
+app.enable('trust proxy')
+
 app.use(logger("dev"));
 
 app.use(express.static(path.join(__dirname, "../public")));
