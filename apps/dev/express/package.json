@@ -6,7 +6,7 @@
   "main": "server.js",
   "private": true,
   "scripts": {
-    "start": "node --experimental-fetch --experimental-global-webcrypto dist/server.js",
+    "start": "node --experimental-fetch --experimental-global-webcrypto --experimental-specifier-resolution=node dist/server.js",
     "build": "pnpm build:ts && pnpm build:css",
     "build:ts": "tsc",
     "build:watch": "pnpm build:ts:watch & pnpm build:css:watch",
